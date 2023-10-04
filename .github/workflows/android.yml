@@ -1,0 +1,29 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Android SDK
+        uses: actions/setup-android@v3
+        with:
+          android-version: "31"
+
+      - name: Build Android app
+        run: ./gradlew assembleDebug
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifacts@v3
+        with:
+          name: android-build
+          path: app/build/outputs/apk/debug/app-debug.apk
